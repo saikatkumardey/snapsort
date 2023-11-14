@@ -19,9 +19,13 @@ def classify_image(image_paths, model, processor, labels):
         try:
             images.append(Image.open(image_path))
         except IOError:
-            print(f"Cannot process {image_path}. Unsupported format or corrupted file.")
+            print(
+                f"Cannot process {image_path}. Unsupported format or corrupted file."
+            )
 
-    inputs = processor(text=labels, images=images, return_tensors="pt", padding=True)
+    inputs = processor(
+        text=labels, images=images, return_tensors="pt", padding=True
+    )
     outputs = model(**inputs)
     probs = outputs.logits_per_image.softmax(dim=1)
     max_probs, label_indices = torch.max(probs, dim=1)
@@ -40,7 +44,8 @@ def process_images(directory, labels, dry_run, threshold, batch_size):
         if filename.lower().endswith(IMAGE_EXTENSIONS)
     ]
     image_batches = [
-        image_files[i : i + batch_size] for i in range(0, len(image_files), batch_size)
+        image_files[i : i + batch_size]
+        for i in range(0, len(image_files), batch_size)
     ]
 
     for batch in image_batches:
@@ -52,13 +57,19 @@ def process_images(directory, labels, dry_run, threshold, batch_size):
         if not image_paths:
             continue
 
-        label_indices, max_probs = classify_image(image_paths, model, processor, labels)
+        label_indices, max_probs = classify_image(
+            image_paths, model, processor, labels
+        )
 
         batch_labels = np.array(labels)[label_indices]
 
-        for filepath, label, max_prob in zip(image_paths, batch_labels, max_probs):
+        for filepath, label, max_prob in zip(
+            image_paths, batch_labels, max_probs
+        ):
             if label == "error" or label == labels[-1] or max_prob < threshold:
-                logs.append([f"![{filepath}]({filepath})", label, "", "Skipping"])
+                logs.append(
+                    [f"![{filepath}]({filepath})", label, "", "Skipping"]
+                )
                 continue
 
             target_dir = os.path.join(directory, label)
@@ -89,12 +100,16 @@ def process_images(directory, labels, dry_run, threshold, batch_size):
                     ]
                 )
 
-    logs_df = pd.DataFrame(logs, columns=["file", "class", "probability", "status"])
+    logs_df = pd.DataFrame(
+        logs, columns=["file", "class", "probability", "status"]
+    )
     return logs_df
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Sort images into folders using CLIP.")
+    parser = argparse.ArgumentParser(
+        description="Sort images into folders using CLIP."
+    )
     parser.add_argument("dir", type=str, help="Directory containing images")
     parser.add_argument(
         "--labels",

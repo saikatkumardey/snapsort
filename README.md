@@ -23,7 +23,7 @@ poetry install
 ## Usage
 
 ```
-python app.py --dir /path/to/your/images
+python snapsort.py --dir /path/to/your/images
 ```
 
 The default labels are for a use-case that detects screenshots & receipts and sorts them into separate folders. Any other images are left in the original directory. 
@@ -47,7 +47,7 @@ Set an appropriate batch size with the `--batch-size` flag. The default value is
 ## Demo
 
 ```
-python app.py demo/ -t 0.5 --dry-run
+python snapsort.py demo/ -t 0.5 --dry-run
 ```
 
 ---
