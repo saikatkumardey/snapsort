@@ -28,7 +28,7 @@ python app.py --dir /path/to/your/images
 
 The default labels are for a use-case that detects screenshots & receipts and sorts them into separate folders. Any other images are left in the original directory. 
 
-```
+```json
 [
     "a screenshot of a software interface or a screen capture from phone",
     "a photo of an invoice or a receipt",
@@ -36,7 +36,7 @@ The default labels are for a use-case that detects screenshots & receipts and so
 ]
 ```
 
-The last label should be a catch-all label for images that do not match any of the other labels.
+**The last label should be a catch-all label for images that do not match any of the other labels.**
 
 The threshold is the minimum confidence score required for an image to be sorted into a category. You need to experiment with this value to find the best threshold for your use case. Set it with `--threshold` flag. The default value is 0.5.
 
