@@ -75,7 +75,7 @@ python app.py demo/ -t 0.5 --dry-run
 - Python 3.6+
 - PyTorch
 - PIL (Python Imaging Library)
-- transformers by Hugging Face
+- transformers by HuggingFace
 
 ## Contributing
 
