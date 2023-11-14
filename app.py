@@ -1,12 +1,13 @@
+import argparse
 import os
 import shutil
-from PIL import Image
-import torch
-from transformers import CLIPProcessor, CLIPModel
-import argparse
-import pandas as pd
-from tabulate import tabulate
+
 import numpy as np
+import pandas as pd
+import torch
+from PIL import Image
+from tabulate import tabulate
+from transformers import CLIPModel, CLIPProcessor
 
 OPENAI_MODEL = "openai/clip-vit-base-patch32"
 IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".bmp", ".tiff")
