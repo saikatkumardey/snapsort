@@ -15,13 +15,9 @@ def classify_image(image_paths, model, processor, labels):
         try:
             images.append(Image.open(image_path))
         except IOError:
-            print(
-                f"Cannot process {image_path}. Unsupported format or corrupted file."
-            )
+            print(f"Cannot process {image_path}. Unsupported format or corrupted file.")
 
-    inputs = processor(
-        text=labels, images=images, return_tensors="pt", padding=True
-    )
+    inputs = processor(text=labels, images=images, return_tensors="pt", padding=True)
     outputs = model(**inputs)
     probs = outputs.logits_per_image.softmax(dim=1)
     max_probs, label_indices = torch.max(probs, dim=1)
@@ -36,39 +32,28 @@ def process_images(directory, labels, dry_run, threshold, batch_size):
     image_files = [
         filename
         for filename in os.listdir(directory)
-        if filename.lower().endswith(
-            (".png", ".jpg", ".jpeg", ".bmp", ".tiff")
-        )
+        if filename.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".tiff"))
     ]
     image_batches = [
-        image_files[i : i + batch_size]
-        for i in range(0, len(image_files), batch_size)
+        image_files[i : i + batch_size] for i in range(0, len(image_files), batch_size)
     ]
 
     for batch in image_batches:
         image_paths = [
             os.path.join(directory, filename)
             for filename in batch
-            if filename.lower().endswith(
-                (".png", ".jpg", ".jpeg", ".bmp", ".tiff")
-            )
+            if filename.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".tiff"))
         ]
         if not image_paths:
             continue
 
-        label_indices, max_probs = classify_image(
-            image_paths, model, processor, labels
-        )
+        label_indices, max_probs = classify_image(image_paths, model, processor, labels)
 
         batch_labels = np.array(labels)[label_indices]
 
-        for filepath, label, max_prob in zip(
-            image_paths, batch_labels, max_probs
-        ):
+        for filepath, label, max_prob in zip(image_paths, batch_labels, max_probs):
             if label == "error" or label == labels[-1] or max_prob < threshold:
-                logs.append(
-                    [f"![{filepath}]({filepath})", label, "", "Skipping"]
-                )
+                logs.append([f"![{filepath}]({filepath})", label, "", "Skipping"])
                 continue
 
             target_dir = os.path.join(directory, label)
@@ -99,25 +84,21 @@ def process_images(directory, labels, dry_run, threshold, batch_size):
                     ]
                 )
 
-    logs_df = pd.DataFrame(
-        logs, columns=["file", "class", "probability", "status"]
-    )
+    logs_df = pd.DataFrame(logs, columns=["file", "class", "probability", "status"])
     return logs_df
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Sort images into folders using CLIP."
-    )
+    parser = argparse.ArgumentParser(description="Sort images into folders using CLIP.")
     parser.add_argument("dir", type=str, help="Directory containing images")
     parser.add_argument(
         "--labels",
         type=str,
         nargs="+",
         default=[
-            "a photograph of a screenshot of a software interface or a screen capture from phone",
-            "a photograph of an invoice or a receipt",
-            "a photograph of a real-world scene, an object, a person, or any image not fitting the description of a screenshot, receipt, or invoice",
+            "a screenshot of a software interface or a screen capture from phone",
+            "a photo of an invoice or a receipt",
+            "a photo of a real-world scene, an object, a person, or any image not fitting the description of a screenshot, receipt, or invoice",
         ],
         help="Labels for sorting images",
     )
