@@ -8,6 +8,9 @@ import pandas as pd
 from tabulate import tabulate
 import numpy as np
 
+OPENAI_MODEL = "openai/clip-vit-base-patch32"
+IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".bmp", ".tiff")
+
 
 def classify_image(image_paths, model, processor, labels):
     images = []
@@ -25,14 +28,15 @@ def classify_image(image_paths, model, processor, labels):
 
 
 def process_images(directory, labels, dry_run, threshold, batch_size):
-    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
-    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+    model = CLIPModel.from_pretrained(OPENAI_MODEL)
+    processor = CLIPProcessor.from_pretrained(OPENAI_MODEL)
 
     logs = []
+
     image_files = [
         filename
         for filename in os.listdir(directory)
-        if filename.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".tiff"))
+        if filename.lower().endswith(IMAGE_EXTENSIONS)
     ]
     image_batches = [
         image_files[i : i + batch_size] for i in range(0, len(image_files), batch_size)
@@ -42,7 +46,7 @@ def process_images(directory, labels, dry_run, threshold, batch_size):
         image_paths = [
             os.path.join(directory, filename)
             for filename in batch
-            if filename.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".tiff"))
+            if filename.lower().endswith(IMAGE_EXTENSIONS)
         ]
         if not image_paths:
             continue
