@@ -23,7 +23,7 @@ poetry install
 ## Usage
 
 ```
-snapsort --dir /path/to/your/images
+python app.py --dir /path/to/your/images
 ```
 
 The default labels are for a use-case that detects screenshots & receipts and sorts them into separate folders. Any other images are left in the original directory. 
