@@ -79,7 +79,7 @@ python app.py demo/ -t 0.5 --dry-run
 
 ## Contributing
 
-We welcome contributions to SnapSort. Please read the contributing guidelines to get started.
+We welcome contributions to SnapSort. Feel free to open a pull request or issue.
 
 ## License
 
