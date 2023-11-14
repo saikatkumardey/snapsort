@@ -1,6 +1,6 @@
 # SnapSort
 
-SnapSort is an zero-shot image classification and sorting tool built upon OpenAI's CLIP model. Designed for efficiency and accuracy, it empowers users to organize large sets of images into distinct categories using the power of AI.
+SnapSort can help you identify & sort images into different directories. It uses OpenAI's CLIP model locally. No internet connection required.
 
 ## Features
 
